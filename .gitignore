@@ -1,0 +1,9 @@
+# Ignore env
+.env
+
+# Ignore go.mod and go.sum
+go.mod
+go.sum
+
+# Ignore .idea
+.idea/
