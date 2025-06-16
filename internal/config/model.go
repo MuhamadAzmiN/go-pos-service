@@ -5,9 +5,9 @@ type Config struct {
 	Server     Server
 	Jwt        Jwt
 	Log        Log
-	MongoDB    *MongoDB   // Optional
+	MongoDB    *MongoDB    // Optional
 	PostgresDB *PostgresDB // Optional
-	Redis      *Redis     // Optional
+	Redis      *Redis      // Optional
 }
 
 type App struct {
@@ -28,7 +28,6 @@ type Log struct {
 	Level    string // debug | info | warn | error
 	FilePath string
 }
-
 
 type MongoDB struct {
 	URI      string
@@ -51,11 +50,7 @@ type Redis struct {
 	DB       int
 }
 
-
 type Jwt struct {
 	Key string
 	Exp int
 }
-
-
-

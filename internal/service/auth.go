@@ -16,13 +16,13 @@ import (
 )
 
 type userService struct {
-	conf *config.Config
+	conf           *config.Config
 	userRepository domain.UserRepository
 }
 
 func NewUser(cnf *config.Config, userRepository domain.UserRepository) domain.AuthService {
 	return &userService{
-		conf : cnf,
+		conf:           cnf,
 		userRepository: userRepository,
 	}
 }
@@ -43,9 +43,6 @@ func (d userService) Register(ctx context.Context, req dto.UserData) (string, er
 	if err != nil {
 		return "", err
 	}
-
-	
-
 
 	newUser := domain.User{
 		Id:        primitive.NewObjectID(),
@@ -69,16 +66,11 @@ func (d userService) Register(ctx context.Context, req dto.UserData) (string, er
 	return tokenStr, nil
 }
 
-
-
-
-
 func (d userService) Login(ctx context.Context, req dto.UserRequest) (dto.UserResponse, error) {
 	user, err := d.userRepository.FindByEmail(ctx, req.Email)
 	if err != nil {
 		return dto.UserResponse{}, err
 	}
-
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
 		return dto.UserResponse{}, errors.New("Authentication failed")
@@ -95,15 +87,10 @@ func (d userService) Login(ctx context.Context, req dto.UserRequest) (dto.UserRe
 	}, nil
 }
 
-
-
-
-
 func (d userService) GetProfile(ctx context.Context, id string) (domain.User, error) {
 
 	return d.userRepository.FindUserId(ctx, id)
 }
-
 
 func (d userService) Logout(ctx context.Context, userId string) error {
 	user, err := d.userRepository.FindUserId(ctx, userId)
@@ -111,7 +98,6 @@ func (d userService) Logout(ctx context.Context, userId string) error {
 		log.Printf("error logout: %v", err)
 		return err
 	}
-	
 
 	if user.Id.Hex() != userId {
 		log.Printf("error logout: %v", err)

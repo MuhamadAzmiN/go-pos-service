@@ -8,8 +8,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-
-
 func LoadConfig() *Config {
 	err := godotenv.Load()
 	if err != nil {
@@ -19,16 +17,15 @@ func LoadConfig() *Config {
 	expInt, _ := strconv.Atoi(os.Getenv("JWT_EXP"))
 	readTimeout, _ := strconv.Atoi(os.Getenv("SERVER_READ_TIMEOUT"))
 	writeTimeout, _ := strconv.Atoi(os.Getenv("SERVER_WRITE_TIMEOUT"))
-	// jwtExp, _ := strconv.Atoi(os.Getenv("JWT_EXPIRATION"))
 	redisDB, _ := strconv.Atoi(os.Getenv("REDIS_DB"))
 	appDebug := os.Getenv("APP_DEBUG") == "true"
 
 	return &Config{
-		App : App{
-			Name: os.Getenv("APP_NAME"),
-			Env:  os.Getenv("APP_ENV"),
+		App: App{
+			Name:    os.Getenv("APP_NAME"),
+			Env:     os.Getenv("APP_ENV"),
 			Version: os.Getenv("APP_VERSION"),
-			Debug: appDebug,
+			Debug:   appDebug,
 		},
 		Server: Server{
 			Host:         os.Getenv("SERVER_HOST"),
@@ -37,7 +34,7 @@ func LoadConfig() *Config {
 			WriteTimeout: writeTimeout,
 		},
 		Jwt: Jwt{
-			Key:        os.Getenv("JWT_KEY"),
+			Key: os.Getenv("JWT_KEY"),
 			Exp: expInt,
 		},
 		Log: Log{
@@ -65,11 +62,8 @@ func LoadConfig() *Config {
 			DB:       redisDB,
 		},
 	}
-	
+
 }
-
-
-
 
 // func Mongo() *Config {
 // 	err := godotenv.Load()
