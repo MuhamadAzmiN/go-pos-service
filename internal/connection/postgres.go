@@ -26,6 +26,8 @@ func InitPostgres(cfg *config.Config) *gorm.DB {
 		cfg.PostgresDB.SSLMode,
 	)
 
+
+	fmt.Println("POSTGRES INFO:", cfg.PostgresDB.Host)
 	db , err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil {
 		log.Fatal("❌ Postgres ping failed:", err)
