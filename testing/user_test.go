@@ -2,10 +2,10 @@ package testing
 
 import (
 	"context"
-	"my-echo-chat_service/domain"
-	"my-echo-chat_service/dto"
-	"my-echo-chat_service/internal/config"
-	"my-echo-chat_service/internal/service"
+	"my-golang-service-pos/domain"
+	"my-golang-service-pos/dto"
+	"my-golang-service-pos/internal/config"
+	"my-golang-service-pos/internal/service"
 	"testing"
 )
 
@@ -52,6 +52,7 @@ func TestRegister(t *testing.T) {
 		},
 	}
 
+	//
 	// Create user service with mock repo
 	userService := service.NewUser(conf, mockRepo)
 
@@ -104,6 +105,7 @@ func TestRegister(t *testing.T) {
 		if result != "" {
 			t.Errorf("Expected empty result for duplicate email, got %v", result)
 		}
+
 	})
 
 }

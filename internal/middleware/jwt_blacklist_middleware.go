@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"my-echo-chat_service/dto"
-	
+	"my-golang-service-pos/dto"
+
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -17,7 +17,6 @@ func JWTBlacklistMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		token := user.(*jwt.Token).Raw
-		
 
 		if IsBlacklisted(token) {
 			return c.JSON(http.StatusUnauthorized, dto.CreateResponseError("Token has been revoked"))
@@ -27,18 +26,15 @@ func JWTBlacklistMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-
-
 func CheckBlacklist(next echo.HandlerFunc) echo.HandlerFunc {
-    return func(c echo.Context) error {
-        user := c.Get("user").(*jwt.Token)
-        tokenString := user.Raw
+	return func(c echo.Context) error {
+		user := c.Get("user").(*jwt.Token)
+		tokenString := user.Raw
 
 		if IsBlacklisted(tokenString) {
 			return c.JSON(http.StatusUnauthorized, dto.CreateResponseError("Token has been revoked"))
 		}
 
-        return next(c)
-    }
+		return next(c)
+	}
 }
-

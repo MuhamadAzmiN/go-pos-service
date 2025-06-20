@@ -3,9 +3,9 @@ package api
 import (
 	"context"
 	"log"
-	"my-echo-chat_service/domain"
-	"my-echo-chat_service/dto"
-	"my-echo-chat_service/internal/middleware"
+	"my-golang-service-pos/domain"
+	"my-golang-service-pos/dto"
+	"my-golang-service-pos/internal/middleware"
 	"net/http"
 	"time"
 
@@ -17,12 +17,12 @@ type authApi struct {
 	authService domain.AuthService
 }
 
-func NewAuth(app *echo.Echo, authService domain.AuthService, auzMidd echo.MiddlewareFunc) {
+func NewAuth(app *echo.Group, authService domain.AuthService, auzMidd echo.MiddlewareFunc) {
 	a := authApi{
 		authService: authService,
 	}
 
-	api := app.Group("/api/auth")
+	api := app.Group("/auth")
 
 	api.POST("/register", a.Register)
 	api.POST("/login", a.Login)

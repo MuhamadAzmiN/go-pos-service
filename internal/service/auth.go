@@ -4,14 +4,13 @@ import (
 	"context"
 	"errors"
 	"log"
-	"my-echo-chat_service/domain"
-	"my-echo-chat_service/dto"
-	"my-echo-chat_service/internal/config"
-	"my-echo-chat_service/internal/utils"
-
+	"my-golang-service-pos/domain"
+	"my-golang-service-pos/dto"
+	"my-golang-service-pos/internal/config"
+	"my-golang-service-pos/internal/utils"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -32,7 +31,7 @@ func (d userService) Register(ctx context.Context, req dto.UserData) (string, er
 	if err != nil {
 		return "", err
 	}
-	if existingUser.Id != primitive.NilObjectID {
+	if existingUser.Id != uuid.Nil {
 		return "", errors.New("Email already exists")
 	}
 
@@ -45,7 +44,7 @@ func (d userService) Register(ctx context.Context, req dto.UserData) (string, er
 	}
 
 	newUser := domain.User{
-		Id:        primitive.NewObjectID(),
+		Id:        uuid.New(),
 		FullName:  req.Fullname,
 		Email:     req.Email,
 		Password:  string(hashedPassword),
@@ -53,12 +52,12 @@ func (d userService) Register(ctx context.Context, req dto.UserData) (string, er
 	}
 
 	err = d.userRepository.Insert(ctx, newUser)
+
 	if err != nil {
 		return "", err
 	}
 
-	// Generate token dengan utils
-	tokenStr, err := utils.GenerateToken(newUser.Id.Hex(), d.conf.Jwt)
+	tokenStr, err := utils.GenerateToken(newUser.Id.String(), d.conf.Jwt)
 	if err != nil {
 		return "", err
 	}
@@ -77,7 +76,7 @@ func (d userService) Login(ctx context.Context, req dto.UserRequest) (dto.UserRe
 	}
 
 	// Generate token dari utils
-	tokenStr, err := utils.GenerateToken(user.Id.Hex(), d.conf.Jwt)
+	tokenStr, err := utils.GenerateToken(user.Id.String(), d.conf.Jwt)
 	if err != nil {
 		return dto.UserResponse{}, errors.New("Authentication failed (token error)")
 	}
@@ -99,10 +98,9 @@ func (d userService) Logout(ctx context.Context, userId string) error {
 		return err
 	}
 
-	if user.Id.Hex() != userId {
+	if user.Id.String() != userId {
 		log.Printf("error logout: %v", err)
 		return errors.New("You are not authorized")
 	}
-
 	return nil
 }

@@ -1,17 +1,17 @@
 package connection
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
-	"my-echo-chat_service/internal/config"
+	"my-golang-service-pos/internal/config"
 
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var PostgresDB *sql.DB
 
-func InitPostgres(cfg *config.Config) *sql.DB {
+func InitPostgres(cfg *config.Config) *gorm.DB {
 	if cfg.PostgresDB == nil {
 		log.Fatal("Postgres config is nil")
 	}
@@ -26,18 +26,12 @@ func InitPostgres(cfg *config.Config) *sql.DB {
 		cfg.PostgresDB.SSLMode,
 	)
 
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		log.Fatal("❌ Failed to open Postgres connection:", err)
-	}
-
-	err = db.Ping()
+	db , err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil {
 		log.Fatal("❌ Postgres ping failed:", err)
 	}
 
 	log.Println("✅ Connected to PostgreSQL")
-	PostgresDB = db
 
 	return db
 }

@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"my-echo-chat_service/internal/config"
+	"my-golang-service-pos/internal/config"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -16,5 +16,3 @@ func GenerateToken(userID string, config config.Jwt) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(config.Key))
 }
-
-

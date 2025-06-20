@@ -2,7 +2,7 @@ package domain
 
 import (
 	"context"
-	"my-echo-chat_service/dto"
+	"my-golang-service-pos/dto"
 )
 
 type AuthService interface {

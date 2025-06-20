@@ -2,16 +2,17 @@ package domain
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"time"
+	"github.com/google/uuid"
 )
 
 type User struct {
-	Id        primitive.ObjectID `bson:"_id" bson:"_id,omitempty"`
-	Email     string             `json:"email"`
-	FullName  string             `json:"fullname"`
-	Password  string             `json:"password"`
-	CreatedAt time.Time          `json:"created_at"`
+	Id        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primaryKey" json:"id"`
+	Email     string    `json:"email"`
+	FullName  string    `json:"fullname"`
+	Password  string    `json:"password"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type UserRepository interface {
