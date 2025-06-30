@@ -2,15 +2,15 @@ package domain
 
 import (
 	"context"
+	"github.com/google/uuid"
 
 	"time"
-	"github.com/google/uuid"
 )
 
 type User struct {
 	Id        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primaryKey" json:"id"`
 	Email     string    `json:"email"`
-	FullName  string    `json:"fullname"`
+	FullName  string    `json:"fullName"`
 	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"created_at"`
 }

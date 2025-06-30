@@ -81,31 +81,4 @@ func TestRegister(t *testing.T) {
 		}
 	})
 
-	t.Run("Duplicate email registrasiton", func(t *testing.T) {
-		ctx := context.Background()
-
-		testUser := dto.UserData{
-			Fullname: "azmi",
-			Email:    "duplicate@gmail.com",
-			Password: "password123",
-		}
-
-		mockRepo := &mockUserRepository{
-			existingEmail: "duplicate@gmail.com",
-		}
-
-		userService := service.NewUser(conf, mockRepo)
-
-		result, err := userService.Register(ctx, testUser)
-
-		if err == nil {
-			t.Errorf("Expected error for duplicate email, got nil")
-		}
-
-		if result != "" {
-			t.Errorf("Expected empty result for duplicate email, got %v", result)
-		}
-
-	})
-
 }

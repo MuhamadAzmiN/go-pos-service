@@ -53,6 +53,7 @@ func LoadConfig() *Config {
 			Host:     os.Getenv("POSTGRES_HOST"),
 			Port:     os.Getenv("POSTGRES_PORT"),
 			DBName:   os.Getenv("POSTGRES_DB"),
+			SSLMode: os.Getenv("POSTGRES_SSLMODE"),
 		},
 
 		Redis: &Redis{
@@ -64,27 +65,3 @@ func LoadConfig() *Config {
 	}
 
 }
-
-// func Mongo() *Config {
-// 	err := godotenv.Load()
-
-// 	if err != nil {
-// 		log.Fatal("file .env not found")
-// 	}
-
-// 	expInt,_ := strconv.Atoi(os.Getenv("JWT_EXP"))
-
-// 	return &Config{
-// 		Server: Server{
-// 			Host: os.Getenv("SERVER_HOST"),
-// 			Port: os.Getenv("SERVER_PORT"),
-// 		},
-// 		MongoDB: MongoDB {
-// 			URI: os.Getenv("MONGO_URI"),
-// 		},
-// 		Jwt: Jwt{
-// 			Key: os.Getenv("JWT_KEY"),
-// 			Exp: expInt,
-// 		},
-// 	}
-// }

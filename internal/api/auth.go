@@ -69,11 +69,10 @@ func (aa authApi) Login(ctx echo.Context) error {
 }
 
 func (aa authApi) GetProfile(ctx echo.Context) error {
-	user := ctx.Get("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	userId := claims["id"].(string)
+	userID := ctx.Get("user_id").(string)
+	
 
-	userData, err := aa.authService.GetProfile(ctx.Request().Context(), userId)
+	userData, err := aa.authService.GetProfile(ctx.Request().Context(), userID)
 	if err != nil {
 		return ctx.JSON(http.StatusInternalServerError, dto.CreateResponseErrorData(err.Error()))
 	}
@@ -106,3 +105,12 @@ func (aa authApi) Logout(ctx echo.Context) error {
 
 	return ctx.JSON(http.StatusOK, dto.CreateResponseSuccessData("Success Logout Account", nil))
 }
+
+
+
+
+
+
+
+
+

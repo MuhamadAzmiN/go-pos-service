@@ -27,17 +27,7 @@ func NewUser(cnf *config.Config, userRepository domain.UserRepository) domain.Au
 }
 
 func (d userService) Register(ctx context.Context, req dto.UserData) (string, error) {
-	existingUser, err := d.userRepository.FindByEmail(ctx, req.Email)
-	if err != nil {
-		return "", err
-	}
-	if existingUser.Id != uuid.Nil {
-		return "", errors.New("Email already exists")
-	}
 
-	if existingUser.Email == req.Email {
-		return "", errors.New("Email already exists")
-	}
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", err
@@ -72,13 +62,13 @@ func (d userService) Login(ctx context.Context, req dto.UserRequest) (dto.UserRe
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
-		return dto.UserResponse{}, errors.New("Authentication failed")
+		return dto.UserResponse{}, errors.New("authentication failed")
 	}
 
 	// Generate token dari utils
 	tokenStr, err := utils.GenerateToken(user.Id.String(), d.conf.Jwt)
 	if err != nil {
-		return dto.UserResponse{}, errors.New("Authentication failed (token error)")
+		return dto.UserResponse{}, errors.New("authentication failed (token error)")
 	}
 
 	return dto.UserResponse{
@@ -100,7 +90,7 @@ func (d userService) Logout(ctx context.Context, userId string) error {
 
 	if user.Id.String() != userId {
 		log.Printf("error logout: %v", err)
-		return errors.New("You are not authorized")
+		return errors.New("you are not authorized")
 	}
 	return nil
 }

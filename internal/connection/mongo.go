@@ -37,4 +37,7 @@ func GetDatabase() *mongo.Client {
 
 	log.Println("Connected to MongoDB")
 	return client
+    
 }
+
+
