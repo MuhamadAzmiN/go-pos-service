@@ -15,9 +15,9 @@ type Product struct {
 }
 
 type ProductRepository interface {
-	FindAll(ctx context.Context) ([]dto.ProductResponse, error)
+	FindAll(ctx context.Context) ([]Product, error)
 	FindById(ctx context.Context, id string) (Product, error)
-	Insert(ctx context.Context, product dto.ProductRequest) error
+	Insert(ctx context.Context, product Product) error
 	Delete(ctx context.Context, id string) error
 	DecreaseStock(ctx context.Context, productId uuid.UUID, quantity int) error
 }

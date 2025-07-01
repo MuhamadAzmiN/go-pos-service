@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"my-golang-service-pos/domain"
-	"my-golang-service-pos/dto"
 	"my-golang-service-pos/internal/iface"
 
 	"github.com/google/uuid"
@@ -26,8 +25,8 @@ func NewProduct(dbGorm iface.IGorm, db iface.ISqlx) domain.ProductRepository {
 
 
 
-func (p productRepository) FindAll(ctx context.Context) (result []dto.ProductResponse, err error) {
-	dataset := []dto.ProductResponse{}
+func (p productRepository) FindAll(ctx context.Context) (result []domain.Product, err error) {
+	dataset := []domain.Product{}
 	err = p.dbGorm.Model(&domain.Product{}).Find(&dataset).Error
 	if err != nil {
 		return nil, err
@@ -48,7 +47,7 @@ func (p productRepository) FindById(ctx context.Context, id string) (domain.Prod
 
 
 
-func (p productRepository) Insert(ctx context.Context, req dto.ProductRequest) error {
+func (p productRepository) Insert(ctx context.Context, req domain.Product) error {
 	product := domain.Product{
 		Id:    uuid.New(),
 		Name:  req.Name,

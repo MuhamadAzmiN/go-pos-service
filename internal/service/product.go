@@ -28,11 +28,12 @@ func (p *productService) GetProductList(ctx context.Context) ([]dto.ProductRespo
 	var customerData []dto.ProductResponse
 	for _, v := range product {
 		customerData = append(customerData, dto.ProductResponse{
-			Id:    v.Id,
+			Id:    v.Id.String(),
 			Name:  v.Name,
 			Sku:   v.Sku,
-			Price: v.Price,
+			Price: float64(v.Price),
 			Stock: v.Stock,
+			
 		})
 	}
 
@@ -55,10 +56,10 @@ func (p *productService) GetProductById(ctx context.Context, id string) (dto.Pro
 }
 
 func (p *productService) CreateProduct(ctx context.Context, data dto.ProductRequest) error {
-	newProduct := dto.ProductRequest{
+	newProduct := domain.Product{
 		Name:  data.Name,
 		Sku:   data.Sku,
-		Price: data.Price,
+		Price: int(data.Price),
 		Stock: data.Stock,
 	}
 

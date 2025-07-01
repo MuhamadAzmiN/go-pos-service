@@ -77,6 +77,8 @@ func (c CartService) GetCartByUserId(ctx context.Context, userId string) (dto.Ca
 			CreatedAt:   time.Now().Format(time.RFC3339),
 			UpdatedAt:   time.Now().Format(time.RFC3339),
 		})
+
+		
 	}
 
 
@@ -90,8 +92,40 @@ func (c CartService) GetCartByUserId(ctx context.Context, userId string) (dto.Ca
 
 
 
-func (c CartService) GetAll(ctx context.Context) ([]domain.Cart, error) {
-	return c.CartRepository.GetAll(ctx)
+func (c CartService) GetAll(ctx context.Context) ([]dto.CartFullRes, error) {
+	carts, err := c.CartRepository.GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var cartFullResList []dto.CartFullRes
+	for _, cart := range carts {
+		var items []dto.CartItemRes
+		var total int
+
+		subtotal := cart.Quantity * cart.Product.Price
+		total += subtotal
+		items = append(items, dto.CartItemRes{
+			Id:          cart.Id,
+			ProductId:   cart.ProductId,
+			ProductName: cart.Product.Name,
+			Price:       cart.Product.Price,
+			Quantity:    cart.Quantity,
+			Subtotal:    subtotal,
+			Tax:         "0%",
+			Discount:    "0%",
+			CreatedAt:   time.Now().Format(time.RFC3339),
+			UpdatedAt:   time.Now().Format(time.RFC3339),
+		})
+
+		cartFullResList = append(cartFullResList, dto.CartFullRes{
+			UserId: cart.UserId,
+			Items:  items,
+			Total:  total,
+		})
+	}
+
+	return cartFullResList, nil
 }
 
 

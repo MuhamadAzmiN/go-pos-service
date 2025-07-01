@@ -31,9 +31,11 @@ type CartRepository interface {
 type CartService interface {
 	AddOrUpdate(ctx context.Context, req dto.AddCartReq) error
 	GetCartByUserId(ctx context.Context, userId string) (dto.CartFullRes , error)
-	GetAll(ctx context.Context) ([]Cart, error)
+	GetAll(ctx context.Context) ([]dto.CartFullRes, error)
 	DeleteCartById(ctx context.Context, id string) error
 }
+
+
 
 
 
