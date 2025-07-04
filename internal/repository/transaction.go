@@ -63,3 +63,14 @@ func (t transactionRepository) Create(ctx context.Context, transaction domain.Tr
 
 	return transaction, nil
 }
+
+
+
+
+func (t transactionRepository) FindAll(ctx context.Context) ([]domain.Transaction, error) {
+	var transactions []domain.Transaction
+	if err := t.dbGorm.Find(&transactions).Error; err != nil {
+		return nil, err
+	}
+	return transactions, nil
+}

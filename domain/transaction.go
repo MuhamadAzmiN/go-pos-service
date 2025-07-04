@@ -37,8 +37,10 @@ type TransactionItem struct {
 
 type TransactionRepository interface {
 	Create(ctx context.Context, transaction Transaction, items []TransactionItem) (Transaction, error)
+	FindAll(ctx context.Context) ([]Transaction, error) 
 }
 
 type TransactionService interface {
 	CreateTransaction(ctx context.Context, req dto.TransactionRequest) (Transaction, error)
+	GetAllTransaction(ctx context.Context) ([]Transaction, error)
 }

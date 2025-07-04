@@ -31,21 +31,21 @@ func (c cartRepository) Insert(ctx context.Context, userId string, productId uui
 
 	err := c.dbGorm.WithContext(ctx).
 		Where("product_id = ? AND user_id = ?", productId, userId).
-		First(&cart).Error
-
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		// Cart belum ada, insert baru
-		newCart := domain.Cart{
-			Id:        uuid.New(),
-			UserId:    userId,
-			ProductId: productId,
-			Quantity:  quantity,
-		}
-		return c.dbGorm.WithContext(ctx).Create(&newCart).Error
-	}
+		Take(&cart).Error
 
 	if err != nil {
-		// Error lain (misal koneksi DB, dsb)
+
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// Cart belum ada, insert baru
+			newCart := domain.Cart{
+				Id:        uuid.New(),
+				UserId:    userId,
+				ProductId: productId,
+				Quantity:  quantity,
+			}
+			return c.dbGorm.WithContext(ctx).Create(&newCart).Error
+		}
+
 		return err
 	}
 

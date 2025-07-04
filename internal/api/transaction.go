@@ -23,8 +23,9 @@ func NewTransaction(app *echo.Group, transactionService domain.TransactionServic
 
 	api := app.Group("/transaction")
 
-	api.POST("/", a.CreateTransaction, auzMidd, middleware.CheckBlacklist)
 
+	api.POST("/", a.CreateTransaction, auzMidd, middleware.CheckBlacklist)
+	api.GET("/list", a.GetAllTransaction, auzMidd, middleware.CheckBlacklist)
 }
 
 
@@ -43,4 +44,17 @@ func (tr transactionApi) CreateTransaction(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, dto.CreateResponseSuccessData("Success Create Transaction", res))
+}
+
+func (tr transactionApi) GetAllTransaction(c echo.Context) error {
+	ctx , cancel := context.WithTimeout(c.Request().Context(), 10*time.Second)
+	defer cancel()
+
+	res, err := tr.transactionService.GetAllTransaction(ctx)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, dto.CreateResponseErrorData(err.Error()))
+	}
+
+	return c.JSON(http.StatusOK, dto.CreateResponseSuccessData("Success Get All Transaction", res))
+	
 }

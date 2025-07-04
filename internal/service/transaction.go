@@ -34,12 +34,12 @@ func NewTransaction(cnf *config.Config, transactionRepository domain.Transaction
 func (c transactionService) CreateTransaction(ctx context.Context, req dto.TransactionRequest) (domain.Transaction, error) {
 	cartItems, err := c.cartRepository.GetByCartId(ctx, req.UserId.String())
 	if err != nil {
-		return domain.Transaction{}, err
+		return domain.Transaction{}, errors.New("failed to get cart items")
 	}
 
 
 	if len(cartItems) == 0 {
-		return domain.Transaction{}, nil
+		return domain.Transaction{}, errors.New("cart is empty")
 	}
 
 	var total float64
@@ -77,6 +77,9 @@ func (c transactionService) CreateTransaction(ctx context.Context, req dto.Trans
 	}
 
 
+	
+
+
 	savedTrx, err := c.transactionRepository.Create(ctx, trx, items)
 	if err != nil {
 		return domain.Transaction{}, err
@@ -104,5 +107,10 @@ func (c transactionService) CreateTransaction(ctx context.Context, req dto.Trans
 	return savedTrx, nil
 
 
+}
+
+
+func (c transactionService) GetAllTransaction(ctx context.Context) ([]domain.Transaction, error) {
+	return c.transactionRepository.FindAll(ctx)
 }
 
