@@ -65,6 +65,7 @@ func (p productRepository) Insert(ctx context.Context, req domain.Product) error
 }
 
 
+
 func (p productRepository) Delete(ctx context.Context, id string) error {
 	err := p.dbGorm.WithContext(ctx).Where("id = ?", id).Delete(&domain.Product{}).Error
 	if err != nil {

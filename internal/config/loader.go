@@ -62,6 +62,7 @@ func LoadConfig() *Config {
 			Password: os.Getenv("REDIS_PASSWORD"),
 			DB:       redisDB,
 		},
+
 	}
 
 }

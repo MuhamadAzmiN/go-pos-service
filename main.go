@@ -1,17 +1,18 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
 	"log"
-	"my-golang-service-pos/dto"
 	"my-golang-service-pos/internal/api"
 	"my-golang-service-pos/internal/config"
 	"my-golang-service-pos/internal/connection"
+	"my-golang-service-pos/internal/kasir"
 	"my-golang-service-pos/internal/repository"
 	"my-golang-service-pos/internal/service"
-	"net/http"
 
-	jwtMid "github.com/labstack/echo-jwt/v4"
+	"github.com/labstack/echo/v4"
+
+	myMiddleware "my-golang-service-pos/internal/middleware"
+
 	"github.com/labstack/echo/v4/middleware"
 )
 
@@ -28,13 +29,7 @@ func main() {
 
 	app := echo.New()
 
-	jwtMiddleware := jwtMid.WithConfig(jwtMid.Config{
-		SigningKey: []byte(cnf.Jwt.Key),
-		ContextKey: "user",
-		ErrorHandler: func(ctx echo.Context, err error) error {
-			return ctx.JSON(http.StatusUnauthorized, dto.CreateResponseError("Authentication failed"))
-		},
-	})
+	jwtMiddleware := myMiddleware.NewJWTMiddleware(cnf.Jwt.Key)
 
 
 	apiPath := app.Group("/api")
@@ -50,17 +45,19 @@ func main() {
 	userRepository := repository.NewUser(dbGorm, db) 
 	userService := service.NewUser(cnf, userRepository)
 
+
+	kasir.RegisterServices(app, config.ServiceParam{
+		Config: cnf,
+		Db: db,
+		DbGorm: dbGorm,
+		JwtMiddleware: jwtMiddleware,
+	})
+
 	productRepository := repository.NewProduct(dbGorm, db)
 	productService := service.NewProduct(cnf, productRepository)
 
 	cartRepository := repository.NewCart(dbGorm, db)
 	cartService := service.NewCart(cnf, cartRepository, productRepository)
-
-	transactionRepository := repository.NewTransaction(dbGorm, db)
-	transactionService := service.NewTransaction(cnf, transactionRepository, cartRepository, productRepository)
-
-	
-	api.NewTransaction(apiPath, transactionService, jwtMiddleware)
 	api.NewAuth(apiPath, userService, jwtMiddleware)
 	api.NewProduct(apiPath, productService, jwtMiddleware)
 	api.NewCart(apiPath, cartService, jwtMiddleware)
@@ -69,6 +66,9 @@ func main() {
 	app.Logger.Fatal(app.Start(cnf.Server.Host + ":" + cnf.Server.Port))
 
 }
+
+
+
 
 
 

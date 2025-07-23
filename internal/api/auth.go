@@ -86,6 +86,7 @@ func (aa authApi) Logout(ctx echo.Context) error {
 	claims := user.Claims.(jwt.MapClaims)
 	userId := claims["id"].(string)
 	tokenRaw := user.Raw
+	
 
 	log.Print(userId)
 
@@ -104,7 +105,12 @@ func (aa authApi) Logout(ctx echo.Context) error {
 	middleware.AddToBlacklist(tokenRaw)
 
 	return ctx.JSON(http.StatusOK, dto.CreateResponseSuccessData("Success Logout Account", nil))
+
 }
+
+
+
+
 
 
 

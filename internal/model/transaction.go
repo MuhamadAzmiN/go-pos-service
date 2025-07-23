@@ -22,3 +22,6 @@ type Transaction struct {
 
 	Items          []TransactionItems `gorm:"foreignKey:TransactionID" json:"items"` // relasi ke item transaksi
 }
+
+
+

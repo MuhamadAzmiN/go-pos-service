@@ -26,6 +26,7 @@ func CreateResponseErrorData(message string) Response[string] {
 
 
 
+
 func CreateResponseSuccessData(message string, data any) Response[any] {
 	return Response[any]{
 		Code:    "00",

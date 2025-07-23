@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/jmoiron/sqlx"
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
@@ -68,13 +69,14 @@ type (
 	
 	ServiceParam struct {
 		RepoParam
+		Config *Config
 		Db *sqlx.DB
 		DbGorm *gorm.DB
+		JwtMiddleware echo.MiddlewareFunc
 	}
 	
 	
 	RepoParam struct {
 		Config *Config
-	
 	}
 )
